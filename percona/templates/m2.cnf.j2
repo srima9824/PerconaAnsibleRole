@@ -1,0 +1,29 @@
+#
+# The Percona XtraDB Cluster 5.7 configuration file.
+#
+#
+# * IMPORTANT: Additional settings that can override those from this file!
+#   The files must end with '.cnf', otherwise they'll be ignored.
+#   Please make any edits and changes to the appropriate sectional files
+#   included below.
+#
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/percona-xtradb-cluster.conf.d/
+wsrep_provider=/usr/lib/libgalera_smm.so
+
+wsrep_cluster_name={{wsrep_cluster_name}}
+wsrep_cluster_address=gcomm://{{wsrep_node_1_ip}},{{wsrep_node_2_ip}}
+
+wsrep_node_name={{wsrep_node__name}}
+wsrep_node_address={{wsrep_node_2_ip}}
+
+wsrep_sst_method=xtrabackup-v2
+wsrep_sst_auth={{wsrep_sst_auth}}
+
+pxc_strict_mode=ENFORCING
+
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
+
+

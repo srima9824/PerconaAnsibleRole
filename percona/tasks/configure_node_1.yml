@@ -1,0 +1,44 @@
+---
+- name: Copying configuration parameters to /etc/mysql/my.cnf file for node 1
+  become: yes
+  become_user: root
+  template:
+          src: my1.cnf.j2
+          dest: /etc/mysql/percona-xtradb-cluster.cnf
+          owner: root
+          group: root
+          mode: 0644
+  when: inventory_hostname in groups['host1']
+
+- name: Create symbolic link /etc/mysql/my.cnf -> /etc/alternatives/my.cnf
+  become: yes 
+  become_user: root
+  file:
+    src: /etc/alternatives/my.cnf
+    dest: /etc/mysql/my.cnf
+    state: link
+    force: yes
+    mode: 0777
+  when: inventory_hostname in groups['host1']
+
+- name: Create symbolic link /etc/alternatives -> /etc/mysql/percona
+  become: yes
+  become_user: root
+  file:
+    src: /etc/mysql/percona-xtradb-cluster.cnf
+    dest: /etc/alternatives/my.cnf
+    state: link
+    force: yes
+    mode: 0777
+  when: inventory_hostname in groups['host1']
+
+- name: Starting mysql service
+  service:
+         name: mysql
+         state: started
+
+- name: Running script to add mysql user and giving priviledges
+  become: yes
+  script: add_user.sh
+  when: inventory_hostname in groups['host1']
+

@@ -1,0 +1,52 @@
+---
+- name: Downloading Percona XtraDB cluster
+  become: true
+  get_url:
+          url: https://repo.percona.com/apt/{{percona_package_url}}
+          dest: "/tmp"
+
+- name: Installing Percona XtraDB cluster
+  apt:
+    deb: /tmp/{{percona_package_url}}
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Installing dependencies using apt-get
+  apt:
+     name: percona-xtradb-cluster-{{percona_version}}
+     state: present
+     force: yes
+  environment:
+     DEBIAN_FRONTEND: noninteractive
+
+- name: Ensure python-pip is present
+  apt: 
+     name: python-pip 
+     state: present
+  when: ansible_os_family|lower == 'debian'
+
+- name: Ensuring python-mysqldb is installed
+  become: yes
+  apt:
+     name: python-mysqldb
+     state: present
+
+- name: Update Percona MySQL Server root password
+  become: yes
+  become_user: root
+  mysql_user: name=root host={{ item }} password={{ mysql_root_password }} login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Stopping mysql service
+  become: yes
+  service:
+         name: mysql
+         state: stopped 
+ 

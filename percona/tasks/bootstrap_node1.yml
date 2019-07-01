@@ -1,0 +1,4 @@
+---
+- name: Bootstrapping node 1
+  command: /etc/init.d/mysql bootstrap-pxc
+  become: yes

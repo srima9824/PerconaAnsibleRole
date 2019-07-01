@@ -1,0 +1,29 @@
+---
+- name: Copying configuration parameters to /etc/mysql/my.cnf file for node 1
+  become: yes
+  template:
+          src: my2.cnf.j2
+          dest: /etc/mysql/percona-xtradb-cluster.cnf
+          owner: root
+          group: root
+          mode: 0644
+  when: inventory_hostname in groups['host2']
+
+- name: Create symbolic link /etc/mysql/my.cnf -> /etc/alternatives/my.cnf
+  become: yes
+  file:
+    src: /etc/alternatives/my.cnf
+    dest: /etc/mysql/my.cnf
+    state: link
+    force: yes
+  when: inventory_hostname in groups['host2']
+
+- name: Create symbolic link /etc/alternatives -> /etc/mysql/percona
+  become: yes
+  file:
+    src: /etc/mysql/percona-xtradb-cluster.cnf
+    dest: /etc/alternatives/my.cnf
+    state: link
+    force: yes
+  when: inventory_hostname in groups['host1']
+  

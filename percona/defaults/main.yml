@@ -1,0 +1,16 @@
+---
+# defaults file for percona
+percona_package_url: percona-release_0.1-10.bionic_all.deb
+percona_version: 57
+percona_xtradb_cluster_version: 5.7.14-26.17
+percona_xtradb_release_version: 5.7.14-rel8-26.17.1
+sslversion: ssl100
+mysql_root_password: 1
+wsrep_cluster_name: pxc-cluster
+wsrep_node_1_ip: 18.220.244.220
+wsrep_node_2_ip: 52.15.235.234
+wsrep_node_1_name: pxc1
+wsrep_node_2_name: pxc2
+wsrep_sst_method: xtrabackup-v2
+wsrep_sst_auth: sstuser:sstuser
+

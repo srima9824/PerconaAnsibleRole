@@ -1,0 +1,10 @@
+---
+# tasks file for percona
+- import_tasks: install_percona.yml
+
+- import_tasks: configure_node_1.yml
+
+- import_tasks: bootstrap_node1.yml
+
+- import_tasks: configure_node_2.yml
+
